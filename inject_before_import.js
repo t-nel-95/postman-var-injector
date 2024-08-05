@@ -1,6 +1,6 @@
 // TODO: Switch to a fetch
 const fs = require("fs");
-let json = require("./data.json");
+let json = require("./input/data.json");
 
 // Helper functions
 
@@ -8,7 +8,7 @@ const postman_var_fmt = (string) => {
   return `{{${string}}}`;
 };
 const postman_arr_var_fmt = (string) => {
-  return [`{{${string}}}`];
+  return [`{{arr_${string}}}`];
 };
 
 // iterate Endpoints
@@ -48,7 +48,6 @@ for (const [schema, schema_props] of Object.entries(json.components.schemas)) {
     for (const [property, property_props] of Object.entries(
       schema_props.properties
     )) {
-      // TODO: change how arrays are handled?
       if (property_props.type == "array") {
         json.components.schemas[schema].properties[
           property
@@ -62,7 +61,7 @@ for (const [schema, schema_props] of Object.entries(json.components.schemas)) {
   }
 }
 
-fs.writeFile("test.json", JSON.stringify(json), (err) => {
+fs.writeFile("./output/pre_inject.json", JSON.stringify(json), (err) => {
   if (err) {
     console.log(err);
   }
