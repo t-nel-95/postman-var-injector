@@ -8,7 +8,7 @@ const postman_var_fmt = (string) => {
   return `{{${string}}}`;
 };
 const postman_arr_var_fmt = (string) => {
-  return [`{{arr_${string}}}`];
+  return `{{arr_${string}}}`;
 };
 
 // iterate Endpoints
