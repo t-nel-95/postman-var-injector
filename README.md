@@ -4,7 +4,7 @@ This tool automatically adds `{{postman_variables}}` with the same name as the r
 
 ## How to use the tool
 
-First place the JSON file exported from Apicurio/Swagger/Openapi in the `/ìnput` folder in this directory, and rename it to `data.json`.
+First place the JSON file exported from Apicurio/Swagger/Openapi in the `/input` folder in this directory, and rename it to `data.json`.
 
 ### Docker
 
