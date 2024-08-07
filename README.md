@@ -41,3 +41,7 @@ pm.collectionVariables.set("postman_array_var", JSON.stringify(myArray));
 ```
 
 Normal values (strings, integers) can be set without being stringified first.
+
+## Run the unit tests
+
+You can run the unit tests by executing the bash script: `./test.sh`

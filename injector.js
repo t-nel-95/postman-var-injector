@@ -104,3 +104,11 @@ Converter.convert(data, undefined, (err, res) => {
         }
     });
 });
+
+module.exports = {
+    postman_param_fmt,
+    postman_var_fmt,
+    postman_arr_var_fmt,
+    postman_obj_var_fmt,
+    remove_variable_quotes
+}
