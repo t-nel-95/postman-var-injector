@@ -5,14 +5,17 @@ const fs = require("fs");
 let openapi_spec = require("./input/data.json");
 
 // Helper functions
-const postman_var_fmt = (string) => {
-    return `{{${string}}}`;
+const postman_param_fmt = (param_name) => {
+    return `{{${param_name}}}`;
+}
+const postman_var_fmt = (var_name, parent) => {
+    return `{{${parent}_${var_name}}}`;
 };
-const postman_arr_var_fmt = (string) => {
-    return `{{arr_${string}}}`;
+const postman_arr_var_fmt = (arr_name, parent) => {
+    return `{{${parent}_arr_${arr_name}}}`;
 };
-const postman_obj_var_fmt = (string) => {
-    return `{{obj_${string}}}`;
+const postman_obj_var_fmt = (obj_name, parent) => {
+    return `{{${parent}_obj_${obj_name}}}`;
 };
 const remove_variable_quotes = (collection_as_string, regex) => {
     return collection_as_string.replace(regex, (match) => {
@@ -26,7 +29,7 @@ for (const [endpoint, endpoint_props] of Object.entries(openapi_spec.paths)) {
     if (endpoint_props.hasOwnProperty("parameters")) {
         for (let index = 0; index < endpoint_props.parameters.length; index++) {
             const param = endpoint_props.parameters[index];
-            const postman_var = postman_var_fmt(param.name);
+            const postman_var = postman_param_fmt(param.name);
             openapi_spec.paths[endpoint].parameters[index].schema.default = postman_var;
         }
     }
@@ -40,7 +43,7 @@ for (const [endpoint, endpoint_props] of Object.entries(openapi_spec.paths)) {
                     index++
                 ) {
                     const param = endpoint_props[method].parameters[index];
-                    const postman_var = postman_var_fmt(param.name);
+                    const postman_var = postman_param_fmt(param.name);
                     openapi_spec.paths[endpoint][method].parameters[
                         index
                     ].schema.default = postman_var;
@@ -60,15 +63,16 @@ for (const [schema, schema_props] of Object.entries(openapi_spec.components.sche
             if (property_props.type == "array") {
                 openapi_spec.components.schemas[schema].properties[
                     property
-                ].default = postman_arr_var_fmt(property);
+                ].default = postman_arr_var_fmt(property, schema);
             } else if (property_props.type == "object") {
                 openapi_spec.components.schemas[schema].properties[
                     property
-                ].default = postman_obj_var_fmt(property);
+                ].default = postman_obj_var_fmt(property, schema);
             } else {
+                let property_name = property;
                 openapi_spec.components.schemas[schema].properties[
                     property
-                ].default = postman_var_fmt(property);
+                ].default = postman_var_fmt(property_name, schema);
             }
         }
     }
@@ -86,15 +90,15 @@ Converter.convert(data, undefined, (err, res) => {
     }
     postman_collection = res.output[0].data;
 
-    const array_var_regex = /\\\"{{arr_\w+}}\\\"/gm;
-    const object_var_regex = /\\\"{{obj_\w+}}\\\"/gm;
+    const array_var_regex = /\\\"{{\w+_arr_\w+}}\\\"/gm;
+    const object_var_regex = /\\\"{{\w+_obj_\w+}}\\\"/gm;
 
     // Remove quotes around arrays and objects
     let collection_as_string = JSON.stringify(postman_collection);
     collection_as_string = remove_variable_quotes(collection_as_string, array_var_regex);
     collection_as_string = remove_variable_quotes(collection_as_string, object_var_regex);
 
-    fs.writeFile("./output/collection.json", JSON.stringify(collection), (err) => {
+    fs.writeFile("./output/collection.json", collection_as_string, (err) => {
         if (err) {
             console.error(err);
         }
