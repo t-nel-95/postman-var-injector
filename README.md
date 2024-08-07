@@ -8,7 +8,7 @@ First place the JSON file exported from Apicurio/Swagger/Openapi in the `/input`
 
 ### Docker
 
-Requires Docker to be installed.
+Requires [Docker](https://www.docker.com/) to be installed.
 
 - Open a terminal in this directory
 - Build the image: `./build.sh`
@@ -17,9 +17,9 @@ Requires Docker to be installed.
 
 ### Locally
 
-Follow the steps in the bash scripts and the Dockerfile.
+Requires Node v22 ([Linux, Mac, WSL](https://github.com/nvm-sh/nvm), [Windows](https://github.com/coreybutler/nvm-windows)) to be installed.
 
-Requires Node v22 to be installed.
+Follow the steps in the Dockerfile and the bash scripts.
 
 ## Import the generated file to Postman
 
