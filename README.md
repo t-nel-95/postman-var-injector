@@ -1,4 +1,4 @@
-# Postman variable injector for Openapi spec
+# Postman variable injector for Openapi 3.0 spec
 
 This tool automatically adds `{{postman_variables}}` with the same name as the request parameters and request body properties, so that you can quickly add parameterised test scripts to the endpoints.
 
